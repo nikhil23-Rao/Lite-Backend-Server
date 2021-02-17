@@ -4,6 +4,9 @@ import { ApolloServer } from "apollo-server-express";
 import fs from "fs";
 import path from "path";
 
+// User Created Modules
+const { connectToDB } = require("../../database/src/connection");
+
 // Middleware
 import cors from "cors";
 import compression from "compression";
@@ -12,6 +15,9 @@ import compression from "compression";
 const app = express();
 app.use("*", cors());
 app.use(compression());
+
+// Connect To Postgres Database
+connectToDB();
 
 // GraphQL + Apollo Resolvers
 const resolvers = {
