@@ -3,6 +3,8 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import fs from "fs";
 import path from "path";
+import bcrypt from "bcrypt";
+import { pick } from "lodash";
 
 // User Created Modules
 const { connectToDB } = require("../../database/src/connection");
@@ -35,13 +37,16 @@ const resolvers = {
   },
   Mutation: {
     Register: async (_: any, args: UserArgsInt) => {
-      await User.sync({ force: true });
-      const user = User.create({
+      // await User.sync({ force: true });
+      const salt = await bcrypt.genSalt(10);
+      const password = await bcrypt.hash(args.password, salt);
+      const user = User.build({
         username: args.username,
         email: args.email,
-        password: args.password,
+        password,
       });
-      return user;
+      await user.save();
+      return pick(user, ["username", "email"]);
     },
   },
 };
