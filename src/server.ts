@@ -36,16 +36,22 @@ const resolvers = {
     },
   },
   Mutation: {
+    // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
       // await User.sync({ force: true });
+      // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
+      // Hash Password
       const password = await bcrypt.hash(args.password, salt);
+      // Build The User
       const user = User.build({
         username: args.username,
         email: args.email,
         password,
       });
+      // Save User To PSQL Database
       await user.save();
+      // Only Return The Username And Email Fields
       return pick(user, ["username", "email"]);
     },
   },
