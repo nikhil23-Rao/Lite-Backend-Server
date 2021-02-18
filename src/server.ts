@@ -6,7 +6,7 @@ import path from "path";
 
 // User Created Modules
 const { connectToDB } = require("../../database/src/connection");
-
+const { User } = require("../../database/models/User");
 // Middleware
 import cors from "cors";
 import compression from "compression";
@@ -19,10 +19,30 @@ app.use(compression());
 // Connect To Postgres Database
 connectToDB();
 
+// Interfaces For Arguments
+interface UserArgsInt {
+  email: string;
+  username: string;
+  password: string;
+}
+
 // GraphQL + Apollo Resolvers
 const resolvers = {
   Query: {
-    hello: () => "Hello World",
+    hello: async () => {
+      await User.drop();
+    },
+  },
+  Mutation: {
+    Register: async (_: any, args: UserArgsInt) => {
+      await User.sync({ force: true });
+      const user = User.create({
+        username: args.username,
+        email: args.email,
+        password: args.password,
+      });
+      return user;
+    },
   },
 };
 
