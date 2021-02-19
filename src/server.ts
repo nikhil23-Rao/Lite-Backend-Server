@@ -1,6 +1,6 @@
 // Modules Imported For Use
 import express from "express";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, ApolloError } from "apollo-server-express";
 import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
@@ -39,10 +39,17 @@ const resolvers = {
     // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
       // await User.sync({ force: true });
+
       // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
       // Hash Password
       const password = await bcrypt.hash(args.password, salt);
+
+      // Check If User Is Already Registered
+      if (await User.findOne({ where: { email: args.email } })) {
+        throw new ApolloError("Account with the given email already exists.");
+      }
+
       // Build The User
       const user = User.build({
         username: args.username,
@@ -50,6 +57,7 @@ const resolvers = {
         password,
         id: "",
       });
+
       // Save User To PSQL Database
       await user.save();
       // Only Return The Username, Email, & Id Fields
@@ -65,6 +73,9 @@ const server: ApolloServer = new ApolloServer({
     "utf-8"
   ),
   resolvers,
+  // formatError:(err) => {
+  // if err.message
+  // }
 });
 
 // Applying All Middleware To The Server And Defining The Path To Be Located At /graphql
