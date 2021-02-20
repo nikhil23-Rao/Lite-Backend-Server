@@ -48,5 +48,22 @@ export const resolvers = {
       // Returns JSONWebToken To Client
       return token;
     },
+    Login: async (_: any, args: UserArgsInt) => {
+      // Check If User Email Is Real
+      let user = await User.findOne({ where: { email: args.email } });
+      if (!user) return new ApolloError("Invalid email or password.");
+
+      // If Email Is Real, Check If Password Is Valid
+      const validPassword = await bcrypt.compare(args.password, user.password);
+      if (!validPassword) return new ApolloError("Invalid email or password.");
+
+      // If Email And Password Is Valid Return JSONWebToken To Client
+      const token = generateJWT({
+        email: user.email,
+        id: user.id,
+        username: user.username,
+      });
+      return token;
+    },
   },
 };
