@@ -2,6 +2,8 @@
 import { ApolloError } from "apollo-server-express";
 import bcrypt from "bcrypt";
 import { pick } from "lodash";
+import jwt from "jsonwebtoken";
+import config from "config";
 const { User } = require("../../database/models/User");
 
 // Interfaces For Arguments
@@ -21,7 +23,7 @@ export const resolvers = {
   Mutation: {
     // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
-      // await User.sync({ force: true });
+      await User.sync({ force: true });
 
       // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
@@ -43,8 +45,17 @@ export const resolvers = {
 
       // Save User To PSQL Database
       await user.save();
+
+      // Create JSONWebToken
+      const token = jwt.sign(
+        { username: user.username, id: user.id, email: user.email },
+        config.get("jwtPrivateKey")
+      );
+
+      console.log(token);
+
       // Only Return The Username, Email, & Id Fields
-      return pick(user, ["username", "email", "id"]);
+      return token;
     },
   },
 };
