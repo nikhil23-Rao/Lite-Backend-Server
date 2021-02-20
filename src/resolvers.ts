@@ -1,17 +1,9 @@
 // Modules Imported For Use
 import { ApolloError } from "apollo-server-express";
 import bcrypt from "bcrypt";
-import { pick } from "lodash";
-import jwt from "jsonwebtoken";
-import config from "config";
+import { generateJWT } from "./auth/generateJWT";
+import { UserArgsInt } from "./interfaces/UserArgsInt";
 const { User } = require("../../database/models/User");
-
-// Interfaces For Arguments
-interface UserArgsInt {
-  email: string;
-  username: string;
-  password: string;
-}
 
 // GraphQL + Apollo Resolvers
 export const resolvers = {
@@ -23,7 +15,7 @@ export const resolvers = {
   Mutation: {
     // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
-      await User.sync({ force: true });
+      // await User.sync({ force: true });
 
       // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
@@ -35,7 +27,7 @@ export const resolvers = {
         throw new ApolloError("Account with the given email already exists.");
       }
 
-      // Build The User
+      // Build The User With Args
       const user = User.build({
         username: args.username,
         email: args.email,
@@ -47,14 +39,13 @@ export const resolvers = {
       await user.save();
 
       // Create JSONWebToken
-      const token = jwt.sign(
-        { username: user.username, id: user.id, email: user.email },
-        config.get("jwtPrivateKey")
-      );
+      const token = generateJWT({
+        username: user.username,
+        email: user.email,
+        id: user.id,
+      });
 
-      console.log(token);
-
-      // Only Return The Username, Email, & Id Fields
+      // Returns JSONWebToken To Client
       return token;
     },
   },

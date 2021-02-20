@@ -39,7 +39,7 @@ const server: ApolloServer = new ApolloServer({
 // Applying All Middleware To The Server And Defining The Path To Be Located At /graphql
 server.applyMiddleware({ app, path: "/graphql" });
 
-// Port
+// Port GQL Is Running On
 const port = process.env.PORT || 4000;
 
 // Creating A New Express Server For The Web
