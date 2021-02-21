@@ -58,6 +58,10 @@ export const resolvers = {
         throw new ApolloError("Account with the given email already exists.");
       }
 
+      if (await User.findOne({ where: { email: args.email } })) {
+        throw new ApolloError("Account with the given email already exists.");
+      }
+
       // Build The User With Args
       const user = OAuthUser.build({
         username: args.username,
