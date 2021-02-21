@@ -110,6 +110,7 @@ export const resolvers = {
         id: user.id,
         username: user.username,
       });
+
       return token;
     },
   },
