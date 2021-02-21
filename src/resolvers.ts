@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
 const { User } = require("../../database/models/User");
+const { OAuthUser } = require("../../database/models/OAuthUser");
 
 // GraphQL + Apollo Resolvers
 export const resolvers = {
@@ -50,15 +51,15 @@ export const resolvers = {
     },
     // OAuth Register Mutation
     OAuthRegister: async (_: any, args: UserArgsInt) => {
-      await User.sync({ force: true });
+      await OAuthUser.sync({ force: true });
 
       // Check If User Is Already Registered
-      if (await User.findOne({ where: { email: args.email } })) {
+      if (await OAuthUser.findOne({ where: { email: args.email } })) {
         throw new ApolloError("Account with the given email already exists.");
       }
 
       // Build The User With Args
-      const user = User.build({
+      const user = OAuthUser.build({
         username: args.username,
         email: args.email,
         id: "",
@@ -96,7 +97,7 @@ export const resolvers = {
     },
     OAuthLogin: async (_: any, args: UserArgsInt) => {
       // Check If User Email Is Real
-      let user = await User.findOne({ where: { email: args.email } });
+      let user = await OAuthUser.findOne({ where: { email: args.email } });
       if (!user) return new ApolloError("Invalid google login.");
 
       // If Email And Password Is Valid Return JSONWebToken To Client
