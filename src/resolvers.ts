@@ -51,7 +51,7 @@ export const resolvers = {
     },
     // OAuth Register Mutation
     OAuthRegister: async (_: any, args: UserArgsInt) => {
-      await OAuthUser.sync({ force: true });
+      // await OAuthUser.sync({ force: true });
 
       // Check If User Is Already Registered
       if (await OAuthUser.findOne({ where: { email: args.email } })) {
