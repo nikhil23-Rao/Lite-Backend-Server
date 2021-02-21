@@ -6,5 +6,5 @@ type Mutation {
   Register(email: String!, username: String!, password: String!): String!
   Login(email: String!, password: String!): String!
   OAuthRegister(email: String!, username: String!): String!
-  OAuthLogin(email: String!, password: String!): String!
+  OAuthLogin(email: String!): String!
 }
