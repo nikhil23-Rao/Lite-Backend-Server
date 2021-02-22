@@ -54,11 +54,10 @@ export const resolvers = {
       // await OAuthUser.sync({ force: true });
 
       // Check If User Is Already Registered
-      if (await OAuthUser.findOne({ where: { email: args.email } })) {
-        throw new ApolloError("Account with the given email already exists.");
-      }
-
-      if (await User.findOne({ where: { email: args.email } })) {
+      if (
+        (await OAuthUser.findOne({ where: { email: args.email } })) ||
+        (await User.findOne({ where: { email: args.email } }))
+      ) {
         throw new ApolloError("Account with the given email already exists.");
       }
 
