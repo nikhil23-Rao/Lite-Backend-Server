@@ -101,7 +101,7 @@ export const resolvers = {
     OAuthLogin: async (_: any, args: UserArgsInt) => {
       // Check If User Email Is Real
       let user = await OAuthUser.findOne({ where: { email: args.email } });
-      if (!user) return new ApolloError("Invalid google login.");
+      if (!user) return new ApolloError("Invalid Microsoft login.");
 
       // If Email And Password Is Valid Return JSONWebToken To Client
       const token = generateJWT({
