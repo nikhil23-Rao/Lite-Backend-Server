@@ -11,12 +11,13 @@ export const resolvers = {
   Query: {
     hello: async () => {
       await User.drop();
+      await OAuthUser.drop();
     },
   },
   Mutation: {
     // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
-      // await User.sync({ force: true });
+      await User.sync({ force: true });
 
       // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
@@ -44,6 +45,7 @@ export const resolvers = {
         username: user.username,
         email: user.email,
         id: user.id,
+        image_url: user.image_url,
       });
 
       // Returns JSONWebToken To Client
@@ -51,7 +53,7 @@ export const resolvers = {
     },
     // OAuth Register Mutation
     OAuthRegister: async (_: any, args: UserArgsInt) => {
-      // await OAuthUser.sync({ force: true });
+      await OAuthUser.sync({ force: true });
 
       // Check If User Is Already Registered
       if (
@@ -76,6 +78,7 @@ export const resolvers = {
         username: user.username,
         email: user.email,
         id: user.id,
+        image_url: user.image_url,
       });
 
       // Returns JSONWebToken To Client

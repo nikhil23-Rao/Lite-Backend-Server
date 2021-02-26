@@ -3,8 +3,13 @@ type Query {
 }
 
 type Mutation {
-  Register(email: String!, username: String!, password: String!): String!
+  Register(
+    email: String!
+    username: String!
+    password: String!
+    image_url: String
+  ): String!
   Login(email: String!, password: String!): String!
-  OAuthRegister(email: String!, username: String!): String!
+  OAuthRegister(email: String!, username: String!, image_url: String): String!
   OAuthLogin(email: String!): String!
 }
