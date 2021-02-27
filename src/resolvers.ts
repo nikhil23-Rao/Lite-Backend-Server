@@ -98,6 +98,7 @@ export const resolvers = {
         email: user.email,
         id: user.id,
         username: user.username,
+        image_url: user.image_url,
       });
       return token;
     },
@@ -111,6 +112,7 @@ export const resolvers = {
         email: user.email,
         id: user.id,
         username: user.username,
+        image_url: user.image_url,
       });
 
       return token;
