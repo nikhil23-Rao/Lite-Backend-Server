@@ -3,5 +3,6 @@ export interface QuizArgsInt {
   name: string;
   image_url: string;
   id: number;
-  questions: Array<number>;
+  userCreatedBy: number;
+  OAuthUserCreatedById: number;
 }

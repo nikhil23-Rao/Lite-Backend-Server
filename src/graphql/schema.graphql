@@ -1,8 +1,9 @@
 # Query
 type Query {
-  hello: String
-  getQuiz(id: Int!): Quiz
-  getQuestions(quizid: Int!): [Question]
+  # Get Quiz By The ID
+  getQuizByID(id: Int!): Quiz
+  # Get Questions For Each Quiz
+  getQuestionsForQuiz(quizid: Int!): [Question]
 }
 
 # Mutation
@@ -23,7 +24,12 @@ type Mutation {
   OAuthLogin(email: String!): String!
 
   # CreateQuiz: Creates A Quiz For The User
-  CreateQuiz(name: String!, image_url: String): Quiz!
+  CreateQuiz(
+    name: String!
+    image_url: String
+    userCreatedBy: Int
+    OAuthUserCreatedById: Int
+  ): Quiz!
 
   # CreateQuestion: Creates A Question For The User To Add To Quiz
   CreateQuestion(
@@ -40,6 +46,8 @@ type Quiz {
   name: String!
   image_url: String
   id: Int!
+  userCreatedById: Int
+  OAuthUserCreatedById: Int
 }
 
 # Question Type
@@ -58,6 +66,7 @@ type Option {
   correct_answer: Boolean!
 }
 
+# Input Type For Options
 input OptionInput {
   title: String!
   correct_answer: Boolean!
