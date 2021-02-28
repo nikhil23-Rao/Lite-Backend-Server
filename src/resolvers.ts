@@ -3,7 +3,12 @@ import { ApolloError } from "apollo-server-express";
 import bcrypt from "bcrypt";
 import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
+import { QuizArgsInt } from "./interfaces/QuizArgsInt";
+import { QuestionArgsInt } from "./interfaces/QuestionArgsInt";
+const { sequelize } = require("../../database/src/db");
+const { Question } = require("../../database/models/Question");
 const { User } = require("../../database/models/User");
+const { Quiz } = require("../../database/models/Quiz");
 const { OAuthUser } = require("../../database/models/OAuthUser");
 
 // GraphQL + Apollo Resolvers
@@ -12,6 +17,20 @@ export const resolvers = {
     hello: async () => {
       await User.drop();
       await OAuthUser.drop();
+    },
+    getQuiz: async (_: any, args: QuizArgsInt) => {
+      const quizzes = await Quiz.findAll({ where: { id: args.id } });
+      if (!quizzes) {
+        return new ApolloError("Invalid id.");
+      }
+      console.log(quizzes);
+    },
+    getQuestions: async (_: any, args: QuestionArgsInt) => {
+      const [res, setRes] = await sequelize.query(
+        `select * from "Questions" where quizid = ${args.quizid};`
+      );
+      console.log(res);
+      return res;
     },
   },
   Mutation: {
@@ -116,6 +135,37 @@ export const resolvers = {
       });
 
       return token;
+    },
+    CreateQuiz: async (_: any, args: QuizArgsInt) => {
+      // await Quiz.sync({ force: true });
+
+      // Build The Quiz With Args
+      const quiz: any = Quiz.build({
+        name: args.name,
+        id: "",
+        questions: args.questions,
+      });
+
+      await quiz.save();
+
+      return quiz;
+    },
+
+    CreateQuestion: async (_: any, args: QuestionArgsInt) => {
+      // await Question.sync({ force: true });
+
+      // Build The Question With Args
+      const question = Question.build({
+        title: args.title,
+        options: args.options,
+        freeresponse: args.freeresponse,
+        multiplechoice: args.multiplechoice,
+        quizid: args.quizid,
+      });
+
+      await question.save();
+
+      return question;
     },
   },
 };

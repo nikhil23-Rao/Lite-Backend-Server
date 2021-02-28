@@ -1,15 +1,64 @@
+# Query
 type Query {
   hello: String
+  getQuiz(id: Int!): Quiz
+  getQuestions(quizid: Int!): [Question]
 }
 
+# Mutation
 type Mutation {
+  # Register: Responsible For Creating A User
   Register(
     email: String!
     username: String!
     password: String!
     image_url: String
   ): String!
+
+  # Login: Responsible For Logging In User And Providing JWT
   Login(email: String!, password: String!): String!
+
+  # OAuth: Does Two Steps Above, Without Password
   OAuthRegister(email: String!, username: String!, image_url: String): String!
   OAuthLogin(email: String!): String!
+
+  # CreateQuiz: Creates A Quiz For The User
+  CreateQuiz(name: String!, image_url: String): Quiz!
+
+  # CreateQuestion: Creates A Question For The User To Add To Quiz
+  CreateQuestion(
+    title: String!
+    freeresponse: Boolean
+    multiplechoice: Boolean
+    options: [OptionInput]
+    quizid: Int
+  ): Question!
+}
+
+# Quiz Type
+type Quiz {
+  name: String!
+  image_url: String
+  id: Int!
+}
+
+# Question Type
+type Question {
+  title: String!
+  id: Int!
+  options: [Option]
+  freeresponse: Boolean
+  multiplechoice: Boolean
+  quizid: Int!
+}
+
+# Option Type
+type Option {
+  title: String!
+  correct_answer: Boolean!
+}
+
+input OptionInput {
+  title: String!
+  correct_answer: Boolean!
 }
