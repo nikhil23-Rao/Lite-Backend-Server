@@ -29,6 +29,7 @@ type Mutation {
     image_url: String
     userCreatedBy: Int
     OAuthUserCreatedById: Int
+    description: String
   ): Quiz!
 
   # CreateQuestion: Creates A Question For The User To Add To Quiz
@@ -48,6 +49,7 @@ type Quiz {
   id: Int!
   userCreatedById: Int
   OAuthUserCreatedById: Int
+  description: String
 }
 
 # Question Type

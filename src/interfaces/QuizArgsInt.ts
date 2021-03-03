@@ -5,4 +5,5 @@ export interface QuizArgsInt {
   id: number;
   userCreatedBy: number;
   OAuthUserCreatedById: number;
+  description: string;
 }

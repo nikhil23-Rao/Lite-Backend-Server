@@ -149,6 +149,7 @@ export const resolvers = {
         id: "",
         usercreatedById: args.userCreatedBy,
         OAuthUserCreatedById: args.OAuthUserCreatedById,
+        description: args.description,
       });
 
       // Save Quiz
