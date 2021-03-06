@@ -1,6 +1,7 @@
-// Interfaces For Arguments
 export interface UserArgsInt {
   email: string;
-  username: string;
+  id: string;
   password: string;
+  username: string;
+  image_url: string;
 }

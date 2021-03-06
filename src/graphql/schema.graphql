@@ -1,9 +1,6 @@
 # Query
 type Query {
-  # Get Quiz By The ID
-  getQuizByID(id: Int!): Quiz
-  # Get Questions For Each Quiz
-  getQuestionsForQuiz(quizid: Int!): [Question]
+  info: String
 }
 
 # Mutation
@@ -20,56 +17,8 @@ type Mutation {
   Login(email: String!, password: String!): String!
 
   # OAuth: Does Two Steps Above, Without Password
+  # OAuth Register
   OAuthRegister(email: String!, username: String!, image_url: String): String!
+  #OAuth Login
   OAuthLogin(email: String!): String!
-
-  # CreateQuiz: Creates A Quiz For The User
-  CreateQuiz(
-    name: String!
-    image_url: String
-    userCreatedBy: Int
-    OAuthUserCreatedById: Int
-    description: String
-  ): Quiz!
-
-  # CreateQuestion: Creates A Question For The User To Add To Quiz
-  CreateQuestion(
-    title: String!
-    freeresponse: Boolean
-    multiplechoice: Boolean
-    options: [OptionInput]
-    quizid: Int
-  ): Question!
-}
-
-# Quiz Type
-type Quiz {
-  name: String!
-  image_url: String
-  id: Int!
-  userCreatedById: Int
-  OAuthUserCreatedById: Int
-  description: String
-}
-
-# Question Type
-type Question {
-  title: String!
-  id: Int!
-  options: [Option]
-  freeresponse: Boolean
-  multiplechoice: Boolean
-  quizid: Int!
-}
-
-# Option Type
-type Option {
-  title: String!
-  correct_answer: Boolean!
-}
-
-# Input Type For Options
-input OptionInput {
-  title: String!
-  correct_answer: Boolean!
 }
