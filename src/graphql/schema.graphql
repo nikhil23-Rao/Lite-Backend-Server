@@ -1,4 +1,4 @@
-# Query
+# Type Query
 type Query {
   info: String
 }
