@@ -17,8 +17,10 @@ type Mutation {
   Login(email: String!, password: String!): String!
 
   # OAuth: Does Two Steps Above, Without Password
+
   # OAuth Register
   OAuthRegister(email: String!, username: String!, image_url: String): String!
+
   #OAuth Login
   OAuthLogin(email: String!): String!
 }
