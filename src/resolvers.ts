@@ -3,8 +3,10 @@ import { ApolloError } from "apollo-server-express";
 import bcrypt from "bcrypt";
 import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
+import { StoryDraftArgsInt } from "./interfaces/StoryDraftArgsInt";
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
+const { StoryDraft } = require("../../database/models/StoryDraft");
 
 // GraphQL + Apollo Resolvers
 export const resolvers = {
@@ -113,6 +115,15 @@ export const resolvers = {
       });
 
       return token;
+    },
+    SaveDraft: async (_: any, args: StoryDraftArgsInt) => {
+      await StoryDraft.sync({ force: true });
+      const draft = StoryDraft.build({
+        content: args.content,
+        image_url: args.image_url,
+      });
+      await draft.save();
+      return draft;
     },
   },
 };
