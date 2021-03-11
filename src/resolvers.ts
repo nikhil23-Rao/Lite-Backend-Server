@@ -116,14 +116,20 @@ export const resolvers = {
 
       return token;
     },
-    SaveDraft: async (_: any, args: StoryDraftArgsInt) => {
+    SaveDraftContent: async (_: any, args: StoryDraftArgsInt) => {
       await StoryDraft.sync({ force: true });
       const draft = StoryDraft.build({
         content: args.content,
-        image_url: args.image_url,
       });
       await draft.save();
-      return draft;
+      return true;
+    },
+    SaveDraftTitleAndImageUrl: async (_: any, args: StoryDraftArgsInt) => {
+      await StoryDraft.update(
+        { title: args.title, image_url: args.image_url },
+        { where: { id: args.id } }
+      );
+      return true;
     },
   },
 };

@@ -30,6 +30,13 @@ type Mutation {
   #OAuth Login
   OAuthLogin(email: String!): String!
 
-  #Save Draft Of Story
-  SaveDraft(content: String, image_url: String): StoryDraft!
+  #Save Draft Content Of Story
+  SaveDraftContent(content: String): Boolean!
+
+  # Save Title And Image Url
+  SaveDraftTitleAndImageUrl(
+    title: String
+    image_url: String
+    id: Int!
+  ): Boolean!
 }
