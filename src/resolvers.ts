@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
 import { StoryDraftArgsInt } from "./interfaces/StoryDraftArgsInt";
+const { sequelize } = require("../../database/src/db");
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
 const { StoryDraft } = require("../../database/models/StoryDraft");
@@ -11,7 +12,17 @@ const { StoryDraft } = require("../../database/models/StoryDraft");
 // GraphQL + Apollo Resolvers
 export const resolvers = {
   Query: {
-    info: () => "Hello World",
+    // Know Which Story To Update Title And Image URL
+    GetStoryDraftID: async () => {
+      const [res] = await sequelize.query(
+        `SELECT * FROM "StoryDrafts" WHERE title IS NULL`
+      );
+      return res[0].id;
+    },
+    GetAllStories: async () => {
+      const stories = await StoryDraft.findAll();
+      return stories;
+    },
   },
   Mutation: {
     // Register Mutation
@@ -99,6 +110,7 @@ export const resolvers = {
         username: user.username,
         image_url: user.image_url,
       });
+      // Return JWT Token To Client
       return token;
     },
     OAuthLogin: async (_: any, args: UserArgsInt) => {
@@ -113,22 +125,27 @@ export const resolvers = {
         username: user.username,
         image_url: user.image_url,
       });
-
+      // Return JWT Token To Client
       return token;
     },
     SaveDraftContent: async (_: any, args: StoryDraftArgsInt) => {
-      await StoryDraft.sync({ force: true });
+      // await StoryDraft.sync({ force: true });
+      // Build Story Draft
       const draft = StoryDraft.build({
         content: args.content,
       });
+      // Save The Draft
       await draft.save();
+      // Return Bool On Whether It Worked
       return true;
     },
     SaveDraftTitleAndImageUrl: async (_: any, args: StoryDraftArgsInt) => {
+      // Update Draft With Title
       await StoryDraft.update(
         { title: args.title, image_url: args.image_url },
         { where: { id: args.id } }
       );
+      // Return Bool On Whether It Worked
       return true;
     },
   },

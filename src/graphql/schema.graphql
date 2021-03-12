@@ -1,11 +1,15 @@
 # Type Query
 type Query {
-  info: String
+  # Know The ID To Save The Title And ImageURl To
+  GetStoryDraftID: Int!
+  # Get All Stories
+  GetAllStories: [StoryDraft]
 }
 
 type StoryDraft {
   content: String
   image_url: String
+  title: String
   id: Int
 }
 
