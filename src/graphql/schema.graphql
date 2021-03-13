@@ -6,11 +6,28 @@ type Query {
   GetAllStories(offset: Int, limit: Int): [StoryDraft]
 }
 
+type User {
+  username: String
+  email: String
+  id: Int
+}
+
+input UserInput {
+  username: String
+  email: String
+  id: Int
+  image_url: String
+  iat: Int
+}
+
 type StoryDraft {
   content: String
   image_url: String
   title: String
   id: Int
+  author: User
+  date_created: String
+  category: String
 }
 
 # Mutation
@@ -35,12 +52,17 @@ type Mutation {
   OAuthLogin(email: String!): String!
 
   #Save Draft Content Of Story
-  SaveDraftContent(content: String): Boolean!
+  SaveDraftContent(
+    content: String
+    author: UserInput
+    date_created: String
+  ): Boolean!
 
   # Save Title And Image Url
   SaveDraftTitleAndImageUrl(
     title: String
     image_url: String
     id: Int!
+    category: String
   ): Boolean!
 }

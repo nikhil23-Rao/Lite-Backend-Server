@@ -137,6 +137,8 @@ export const resolvers = {
       // Build Story Draft
       const draft = StoryDraft.build({
         content: args.content,
+        author: args.author,
+        date_created: args.date_created,
       });
       // Save The Draft
       await draft.save();
@@ -146,7 +148,11 @@ export const resolvers = {
     SaveDraftTitleAndImageUrl: async (_: any, args: StoryDraftArgsInt) => {
       // Update Draft With Title
       await StoryDraft.update(
-        { title: args.title, image_url: args.image_url },
+        {
+          title: args.title,
+          image_url: args.image_url,
+          category: args.category,
+        },
         { where: { id: args.id } }
       );
       // Return Bool On Whether It Worked
