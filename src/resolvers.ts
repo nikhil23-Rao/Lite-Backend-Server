@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
 import { StoryDraftArgsInt } from "./interfaces/StoryDraftArgsInt";
+import { PaginationArgsInt } from "./interfaces/PaginationArgsInt";
 const { sequelize } = require("../../database/src/db");
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
@@ -19,15 +20,18 @@ export const resolvers = {
       );
       return res[0].id;
     },
-    GetAllStories: async () => {
-      const stories = await StoryDraft.findAll();
+    GetAllStories: async (_: any, args: PaginationArgsInt) => {
+      const stories = await StoryDraft.findAll({
+        limit: args.limit,
+        offset: args.offset,
+      });
       return stories;
     },
   },
   Mutation: {
     // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
-      await User.sync({ force: true });
+      // await User.sync({ force: true });
 
       // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
@@ -63,7 +67,7 @@ export const resolvers = {
     },
     // OAuth Register Mutation
     OAuthRegister: async (_: any, args: UserArgsInt) => {
-      await OAuthUser.sync({ force: true });
+      // await OAuthUser.sync({ force: true });
 
       // Check If User Is Already Registered
       if (

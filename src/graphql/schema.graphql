@@ -3,7 +3,7 @@ type Query {
   # Know The ID To Save The Title And ImageURl To
   GetStoryDraftID: Int!
   # Get All Stories
-  GetAllStories: [StoryDraft]
+  GetAllStories(offset: Int, limit: Int): [StoryDraft]
 }
 
 type StoryDraft {
