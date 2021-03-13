@@ -13,7 +13,7 @@ import cors from "cors";
 import compression from "compression";
 import config from "config";
 
-// Defining Express And Adding Additional Middleware
+// Defining Module Express And Adding Additional Middleware
 const app = express();
 app.use("*", cors());
 app.use(compression());
