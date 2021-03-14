@@ -19,12 +19,15 @@ export const resolvers = {
       );
       return res[0].id;
     },
+    // Get All Stories For Specific User
     GetAllStories: async (_: any, args: StoryDraftArgsInt) => {
       const stories = await StoryDraft.findAll({
         where: {
+          // Find By AuthorID`
           authorid: args.authorid,
         },
       });
+      // Return All Stories When Done
       return stories;
     },
   },
