@@ -3,7 +3,7 @@ export interface StoryDraftArgsInt {
   image_url: string;
   title: string;
   id: number;
-  author: object;
+  authorid: number;
   date_created: string;
   category: string;
 }

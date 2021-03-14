@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
 import { StoryDraftArgsInt } from "./interfaces/StoryDraftArgsInt";
-import { PaginationArgsInt } from "./interfaces/PaginationArgsInt";
 const { sequelize } = require("../../database/src/db");
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
@@ -20,10 +19,11 @@ export const resolvers = {
       );
       return res[0].id;
     },
-    GetAllStories: async (_: any, args: PaginationArgsInt) => {
+    GetAllStories: async (_: any, args: StoryDraftArgsInt) => {
       const stories = await StoryDraft.findAll({
-        limit: args.limit,
-        offset: args.offset,
+        where: {
+          authorid: args.authorid,
+        },
       });
       return stories;
     },
@@ -137,7 +137,7 @@ export const resolvers = {
       // Build Story Draft
       const draft = StoryDraft.build({
         content: args.content,
-        author: args.author,
+        authorid: args.authorid,
         date_created: args.date_created,
       });
       // Save The Draft
