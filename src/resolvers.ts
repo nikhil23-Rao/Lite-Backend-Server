@@ -161,5 +161,18 @@ export const resolvers = {
       // Return Bool On Whether It Worked
       return true;
     },
+    SaveDraft: async (_: any, args: StoryDraftArgsInt) => {
+      await StoryDraft.sync({ force: true });
+      const draft = StoryDraft.build({
+        content: args.content,
+        title: args.title,
+        authorid: args.authorid,
+        image_url: args.image_url,
+        date_created: args.date_created,
+        category: args.category,
+      });
+      await draft.save();
+      return true;
+    },
   },
 };

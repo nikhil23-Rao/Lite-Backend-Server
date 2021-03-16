@@ -52,4 +52,14 @@ type Mutation {
     id: Int!
     category: String
   ): Boolean!
+
+  # Save Draft
+  SaveDraft(
+    title: String!
+    content: String!
+    authorid: Int!
+    image_url: String
+    category: String
+    date_created: String
+  ): Boolean!
 }
