@@ -162,7 +162,7 @@ export const resolvers = {
       return true;
     },
     SaveDraft: async (_: any, args: StoryDraftArgsInt) => {
-      await StoryDraft.sync({ force: true });
+      // await StoryDraft.sync({ force: true });
       const draft = StoryDraft.build({
         content: args.content,
         title: args.title,

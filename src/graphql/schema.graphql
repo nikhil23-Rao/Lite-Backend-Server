@@ -13,7 +13,7 @@ type StoryDraft {
   title: String
   id: Int
   authorid: Int
-  date_created: String
+  date_created: [String]
   category: String
 }
 
@@ -60,6 +60,6 @@ type Mutation {
     authorid: Int!
     image_url: String
     category: String
-    date_created: String
+    date_created: [String]
   ): Boolean!
 }

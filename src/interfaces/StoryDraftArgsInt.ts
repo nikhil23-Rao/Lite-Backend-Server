@@ -4,6 +4,6 @@ export interface StoryDraftArgsInt {
   title: string;
   id: number;
   authorid: number;
-  date_created: string;
+  date_created: Array<string>;
   category: string;
 }
