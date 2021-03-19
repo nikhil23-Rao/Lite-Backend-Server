@@ -1,4 +1,4 @@
-export interface StoryDraftArgsInt {
+export interface StoryArgsInt {
   content: string;
   image_url: string;
   title: string;

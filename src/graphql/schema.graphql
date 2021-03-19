@@ -62,4 +62,14 @@ type Mutation {
     category: String
     date_created: [String]
   ): Boolean!
+
+  # Publish Story
+  PublishStory(
+    title: String!
+    content: String!
+    authorid: Int!
+    image_url: String
+    category: String
+    date_created: [String]
+  ): Boolean!
 }

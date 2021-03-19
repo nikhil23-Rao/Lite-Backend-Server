@@ -3,7 +3,8 @@ import { ApolloError } from "apollo-server-express";
 import bcrypt from "bcrypt";
 import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
-import { StoryDraftArgsInt } from "./interfaces/StoryDraftArgsInt";
+import { StoryArgsInt } from "./interfaces/StoryArgsInt";
+const { PublishStory } = require("../../database/models/PublishedStory");
 const { sequelize } = require("../../database/src/db");
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
@@ -20,13 +21,24 @@ export const resolvers = {
       return res[0].id;
     },
     // Get All Stories For Specific User
-    GetAllStories: async (_: any, args: StoryDraftArgsInt) => {
-      const stories = await StoryDraft.findAll({
+    GetAllStories: async (_: any, args: StoryArgsInt) => {
+      const stories = [];
+      const storyDrafts = await StoryDraft.findAll({
         where: {
           // Find By AuthorID`
           authorid: args.authorid,
         },
       });
+
+      const publishedStories = await PublishStory.findAll({
+        where: {
+          // Find By AuthorID`
+          authorid: args.authorid,
+        },
+      });
+
+      // Push Both Stories In One Array
+      stories.push(...storyDrafts, ...publishedStories);
       // Return All Stories When Done
       return stories;
     },
@@ -135,7 +147,7 @@ export const resolvers = {
       // Return JWT Token To Client
       return token;
     },
-    SaveDraftContent: async (_: any, args: StoryDraftArgsInt) => {
+    SaveDraftContent: async (_: any, args: StoryArgsInt) => {
       // await StoryDraft.sync({ force: true });
       // Build Story Draft
       const draft = StoryDraft.build({
@@ -148,7 +160,7 @@ export const resolvers = {
       // Return Bool On Whether It Worked
       return true;
     },
-    SaveDraftTitleAndImageUrl: async (_: any, args: StoryDraftArgsInt) => {
+    SaveDraftTitleAndImageUrl: async (_: any, args: StoryArgsInt) => {
       // Update Draft With Title
       await StoryDraft.update(
         {
@@ -161,7 +173,7 @@ export const resolvers = {
       // Return Bool On Whether It Worked
       return true;
     },
-    SaveDraft: async (_: any, args: StoryDraftArgsInt) => {
+    SaveDraft: async (_: any, args: StoryArgsInt) => {
       // await StoryDraft.sync({ force: true });
       const draft = StoryDraft.build({
         content: args.content,
@@ -172,6 +184,20 @@ export const resolvers = {
         category: args.category,
       });
       await draft.save();
+      return true;
+    },
+
+    PublishStory: async (_: any, args: StoryArgsInt) => {
+      await PublishStory.sync({ force: true });
+      const story = PublishStory.build({
+        content: args.content,
+        title: args.title,
+        authorid: args.authorid,
+        image_url: args.image_url,
+        date_created: args.date_created,
+        category: args.category,
+      });
+      await story.save();
       return true;
     },
   },
