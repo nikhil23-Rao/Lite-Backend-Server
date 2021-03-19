@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
 import { StoryArgsInt } from "./interfaces/StoryArgsInt";
+import { ReadStoryInt } from "./interfaces/ReadStoryInt";
 const { PublishStory } = require("../../database/models/PublishedStory");
 const { sequelize } = require("../../database/src/db");
 const { User } = require("../../database/models/User");
@@ -40,6 +41,17 @@ export const resolvers = {
       // Push Both Stories In One Array
       stories.push(...storyDrafts, ...publishedStories);
       // Return All Stories When Done
+      return stories;
+    },
+    ReadStory: async (_: any, args: ReadStoryInt) => {
+      const story = await PublishStory.findOne({ where: { id: args.storyid } });
+      if (!story) {
+        new ApolloError("This Article Does Not Exist...");
+      }
+      return story;
+    },
+    GetTodaysStories: async () => {
+      const stories = await PublishStory.findAll();
       return stories;
     },
   },
