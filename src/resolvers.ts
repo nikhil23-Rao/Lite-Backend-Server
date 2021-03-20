@@ -21,28 +21,37 @@ export const resolvers = {
       );
       return res[0].id;
     },
+
     // Get All Stories For Specific User
     GetAllStories: async (_: any, args: StoryArgsInt) => {
       const stories = [];
-      const storyDrafts = await StoryDraft.findAll({
-        where: {
-          // Find By AuthorID`
-          authorid: args.authorid,
-        },
-      });
-
       const publishedStories = await PublishStory.findAll({
         where: {
-          // Find By AuthorID`
+          // Find By AuthorID
           authorid: args.authorid,
         },
       });
 
+      for (let story in publishedStories) {
+        stories.push(publishedStories[story].dataValues);
+      }
+
+      const storyDrafts = await StoryDraft.findAll({
+        where: {
+          // Find By AuthorID
+          authorid: args.authorid,
+        },
+      });
+
+      for (let storydraft in storyDrafts) {
+        stories.push(storyDrafts[storydraft].dataValues);
+      }
+
       // Push Both Stories In One Array
-      stories.push(...storyDrafts, ...publishedStories);
-      // Return All Stories When Done
+      console.log(stories);
       return stories;
     },
+
     ReadStory: async (_: any, args: ReadStoryInt) => {
       const story = await PublishStory.findOne({ where: { id: args.storyid } });
       if (!story) {
@@ -194,7 +203,7 @@ export const resolvers = {
         image_url: args.image_url,
         date_created: args.date_created,
         category: args.category,
-        published: false,
+        id: args.id,
       });
       await draft.save();
       return true;
@@ -209,7 +218,7 @@ export const resolvers = {
         image_url: args.image_url,
         date_created: args.date_created,
         category: args.category,
-        published: true,
+        id: args.id,
       });
       await story.save();
       return true;
