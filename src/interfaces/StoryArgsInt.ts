@@ -6,4 +6,5 @@ export interface StoryArgsInt {
   authorid: number;
   date_created: Array<string>;
   category: string;
+  published: boolean;
 }

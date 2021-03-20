@@ -186,7 +186,7 @@ export const resolvers = {
       return true;
     },
     SaveDraft: async (_: any, args: StoryArgsInt) => {
-      // await StoryDraft.sync({ force: true });
+      await StoryDraft.sync({ force: true });
       const draft = StoryDraft.build({
         content: args.content,
         title: args.title,
@@ -194,6 +194,7 @@ export const resolvers = {
         image_url: args.image_url,
         date_created: args.date_created,
         category: args.category,
+        published: false,
       });
       await draft.save();
       return true;
@@ -208,6 +209,7 @@ export const resolvers = {
         image_url: args.image_url,
         date_created: args.date_created,
         category: args.category,
+        published: true,
       });
       await story.save();
       return true;

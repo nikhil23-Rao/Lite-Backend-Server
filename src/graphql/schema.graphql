@@ -22,6 +22,7 @@ type StoryDraft {
   authorid: Int
   date_created: [String]
   category: String
+  published: Boolean
 }
 
 # Mutation
