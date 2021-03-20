@@ -6,7 +6,6 @@ import { UserArgsInt } from "./interfaces/UserArgsInt";
 import { StoryArgsInt } from "./interfaces/StoryArgsInt";
 import { ReadStoryInt } from "./interfaces/ReadStoryInt";
 const { PublishStory } = require("../../database/models/PublishedStory");
-const { sequelize } = require("../../database/src/db");
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
 const { StoryDraft } = require("../../database/models/StoryDraft");
@@ -14,9 +13,10 @@ const { StoryDraft } = require("../../database/models/StoryDraft");
 // GraphQL + Apollo Resolvers
 export const resolvers = {
   Query: {
-    // Get All Stories For Specific User
     GetAllStories: async (_: any, args: StoryArgsInt) => {
+      // Create Empty Array To Put Stories In
       const stories = [];
+      // Find All Published Stories For Given Author
       const publishedStories = await PublishStory.findAll({
         where: {
           // Find By AuthorID
@@ -24,10 +24,12 @@ export const resolvers = {
         },
       });
 
+      // Push Each Published Story In Story Array
       for (let story in publishedStories) {
         stories.push(publishedStories[story].dataValues);
       }
 
+      // Find All Drafts For Given Author
       const storyDrafts = await StoryDraft.findAll({
         where: {
           // Find By AuthorID
@@ -35,23 +37,32 @@ export const resolvers = {
         },
       });
 
+      // Push Drafts Into Array
       for (let storydraft in storyDrafts) {
         stories.push(storyDrafts[storydraft].dataValues);
       }
 
-      // Push Both Stories In One Array
+      // At This Point All Stories Are In Array So Return That To Client
       return stories;
     },
 
     ReadStory: async (_: any, args: ReadStoryInt) => {
+      // Find ONLY From Published Stories And Return The Story CLient Can Read Based On The Story ID Provided
       const story = await PublishStory.findOne({ where: { id: args.storyid } });
+      // If There Is No Story The ID's Do NOT Line Up So Throw Error
       if (!story) {
-        new ApolloError("This Article Does Not Exist...");
+        return new ApolloError("This Article Does Not Exist...");
       }
+      // At The End Return Story Client Can Read
       return story;
     },
+
     GetTodaysStories: async () => {
+      //@TODO - Add Date Property To Compare If Story Came Out Today
+
+      // Find All Published Stories
       const stories = await PublishStory.findAll();
+      //Return Them
       return stories;
     },
   },
@@ -160,7 +171,9 @@ export const resolvers = {
       return token;
     },
     SaveDraft: async (_: any, args: StoryArgsInt) => {
-      await StoryDraft.sync({ force: true });
+      // await StoryDraft.sync({ force: true });
+
+      // Build A New Draft With Given Properties By Client
       const draft = StoryDraft.build({
         content: args.content,
         title: args.title,
@@ -170,12 +183,18 @@ export const resolvers = {
         category: args.category,
         id: args.id,
       });
+
+      // Save The Draft To PSQL DB
       await draft.save();
+
+      // If All Worked Above Return True
       return true;
     },
 
     PublishStory: async (_: any, args: StoryArgsInt) => {
-      await PublishStory.sync({ force: true });
+      // await PublishStory.sync({ force: true });
+
+      // Build Published Story With Given Properties From Client
       const story = PublishStory.build({
         content: args.content,
         title: args.title,
@@ -185,7 +204,11 @@ export const resolvers = {
         category: args.category,
         id: args.id,
       });
+
+      // Save To Story PSQL DB
       await story.save();
+
+      // If All Above Worked Return True
       return true;
     },
   },
