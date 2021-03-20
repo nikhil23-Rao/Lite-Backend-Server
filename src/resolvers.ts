@@ -14,14 +14,6 @@ const { StoryDraft } = require("../../database/models/StoryDraft");
 // GraphQL + Apollo Resolvers
 export const resolvers = {
   Query: {
-    // Know Which Story To Update Title And Image URL
-    GetStoryDraftID: async () => {
-      const [res] = await sequelize.query(
-        `SELECT * FROM "StoryDrafts" WHERE title IS NULL`
-      );
-      return res[0].id;
-    },
-
     // Get All Stories For Specific User
     GetAllStories: async (_: any, args: StoryArgsInt) => {
       const stories = [];
@@ -48,7 +40,6 @@ export const resolvers = {
       }
 
       // Push Both Stories In One Array
-      console.log(stories);
       return stories;
     },
 
@@ -167,32 +158,6 @@ export const resolvers = {
       });
       // Return JWT Token To Client
       return token;
-    },
-    SaveDraftContent: async (_: any, args: StoryArgsInt) => {
-      // await StoryDraft.sync({ force: true });
-      // Build Story Draft
-      const draft = StoryDraft.build({
-        content: args.content,
-        authorid: args.authorid,
-        date_created: args.date_created,
-      });
-      // Save The Draft
-      await draft.save();
-      // Return Bool On Whether It Worked
-      return true;
-    },
-    SaveDraftTitleAndImageUrl: async (_: any, args: StoryArgsInt) => {
-      // Update Draft With Title
-      await StoryDraft.update(
-        {
-          title: args.title,
-          image_url: args.image_url,
-          category: args.category,
-        },
-        { where: { id: args.id } }
-      );
-      // Return Bool On Whether It Worked
-      return true;
     },
     SaveDraft: async (_: any, args: StoryArgsInt) => {
       await StoryDraft.sync({ force: true });
