@@ -1,20 +1,17 @@
 # Type Query
 type Query {
-  # Know The ID To Save The Title And ImageURl To
-  GetStoryDraftID: Int!
-
   # Get All Stories For Specific User
-  GetAllStories(authorid: Int): [StoryDraft]
+  GetAllStories(authorid: Int): [Story]
 
   # Get Specific Info From Story To Read
-  ReadStory(storyid: String): StoryDraft
+  ReadStory(storyid: String): Story
 
   # Get All Published Stories
-  GetTodaysStories: [StoryDraft]
+  GetTodaysStories: [Story]
 }
 
 # StoryDraft Type
-type StoryDraft {
+type Story {
   content: String
   image_url: String
   title: String
@@ -44,21 +41,6 @@ type Mutation {
 
   #OAuth Login
   OAuthLogin(email: String!): String!
-
-  #Save Draft Content Of Story
-  SaveDraftContent(
-    content: String
-    authorid: Int
-    date_created: String
-  ): Boolean!
-
-  # Save Title And Image Url
-  SaveDraftTitleAndImageUrl(
-    title: String
-    image_url: String
-    id: Int!
-    category: String
-  ): Boolean!
 
   # Save Draft
   SaveDraft(
