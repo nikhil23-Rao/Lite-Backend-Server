@@ -5,6 +5,7 @@ import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
 import { StoryArgsInt } from "./interfaces/StoryArgsInt";
 import { ReadStoryInt } from "./interfaces/ReadStoryInt";
+import { LikeStoryArgsInt } from "./interfaces/LikeStoryArgsInt";
 const { PublishStory } = require("../../database/models/PublishedStory");
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
@@ -202,6 +203,8 @@ export const resolvers = {
         image_url: args.image_url,
         date_created: args.date_created,
         category: args.category,
+        likes: 0,
+        likedBy: [],
         id: args.id,
       });
 
@@ -210,6 +213,27 @@ export const resolvers = {
 
       // If All Above Worked Return True
       return true;
+    },
+    LikeStory: async (_: any, args: LikeStoryArgsInt) => {
+      const likedBy: Array<number> = [];
+      const story = await PublishStory.findOne({ where: { id: args.storyid } });
+      console.log("Likes", story.likes);
+
+      if (story.likedBy.includes(args.authorid)) {
+        (story.likes = story.likes - 1),
+          (story.likedBy = story.likedBy.filter(
+            (id: any) => id !== args.authorid
+          )),
+          await story.save();
+        return true;
+      } else {
+        story.likes = story.likes + 1;
+        likedBy.push(...story.likedBy, args.authorid);
+        console.log(likedBy);
+        story.likedBy = likedBy;
+        await story.save();
+        return true;
+      }
     },
   },
 };

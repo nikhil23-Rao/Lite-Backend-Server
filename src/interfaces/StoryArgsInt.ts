@@ -7,4 +7,6 @@ export interface StoryArgsInt {
   date_created: Array<string>;
   category: string;
   published: boolean;
+  likedBy: Array<number>;
+  likes: number;
 }

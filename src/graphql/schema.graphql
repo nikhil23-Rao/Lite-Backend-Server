@@ -1,17 +1,17 @@
 # Type Query
 type Query {
   # Get All Stories For Specific User
-  GetAllStories(authorid: Int): [Story]
+  GetAllStories(authorid: Int): [StoryDraft]
 
   # Get Specific Info From Story To Read
-  ReadStory(storyid: String): Story
+  ReadStory(storyid: String): PublishedStory
 
   # Get All Published Stories
-  GetTodaysStories: [Story]
+  GetTodaysStories: [PublishedStory]
 }
 
 # StoryDraft Type
-type Story {
+type StoryDraft {
   content: String
   image_url: String
   title: String
@@ -19,6 +19,19 @@ type Story {
   authorid: Int
   date_created: [String]
   category: String
+}
+
+# Published Story Type
+type PublishedStory {
+  content: String
+  image_url: String
+  title: String
+  id: String
+  authorid: Int
+  date_created: [String]
+  category: String
+  likes: Int
+  likedBy: [Int]
 }
 
 # Mutation
@@ -63,4 +76,7 @@ type Mutation {
     date_created: [String]
     id: String
   ): Boolean!
+
+  # Like Story
+  LikeStory(storyid: String, authorid: Int): Boolean
 }
