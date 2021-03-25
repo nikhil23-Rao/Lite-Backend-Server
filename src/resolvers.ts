@@ -203,8 +203,6 @@ export const resolvers = {
         image_url: args.image_url,
         date_created: args.date_created,
         category: args.category,
-        likes: 0,
-        likedBy: [],
         id: args.id,
       });
 
@@ -217,12 +215,10 @@ export const resolvers = {
     LikeStory: async (_: any, args: LikeStoryArgsInt) => {
       const likedBy: Array<number> = [];
       const story = await PublishStory.findOne({ where: { id: args.storyid } });
-      console.log("Likes", story.likes);
-
       if (story.likedBy.includes(args.authorid)) {
         (story.likes = story.likes - 1),
           (story.likedBy = story.likedBy.filter(
-            (id: any) => id !== args.authorid
+            (authorid: any) => authorid !== args.authorid
           )),
           await story.save();
         return true;
