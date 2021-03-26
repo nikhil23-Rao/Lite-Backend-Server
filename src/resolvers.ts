@@ -50,6 +50,7 @@ export const resolvers = {
     ReadStory: async (_: any, args: ReadStoryInt) => {
       // Find ONLY From Published Stories And Return The Story CLient Can Read Based On The Story ID Provided
       const story = await PublishStory.findOne({ where: { id: args.storyid } });
+
       // If There Is No Story The ID's Do NOT Line Up So Throw Error
       if (!story) {
         return new ApolloError("This Article Does Not Exist...");
@@ -65,6 +66,11 @@ export const resolvers = {
       const stories = await PublishStory.findAll();
       //Return Them
       return stories;
+    },
+
+    GetEditDraft: async (_: any, args: ReadStoryInt) => {
+      const draft = await StoryDraft.findOne({ where: { id: args.storyid } });
+      return draft;
     },
   },
   Mutation: {
@@ -172,7 +178,7 @@ export const resolvers = {
       return token;
     },
     SaveDraft: async (_: any, args: StoryArgsInt) => {
-      await StoryDraft.sync({ force: true });
+      // await StoryDraft.sync({ force: true });
 
       // Build A New Draft With Given Properties By Client
       const draft = StoryDraft.build({
@@ -193,7 +199,7 @@ export const resolvers = {
     },
 
     PublishStory: async (_: any, args: StoryArgsInt) => {
-      await PublishStory.sync({ force: true });
+      // await PublishStory.sync({ force: true });
 
       // Build Published Story With Given Properties From Client
       const story = PublishStory.build({
@@ -230,6 +236,21 @@ export const resolvers = {
         await story.save();
         return true;
       }
+    },
+    EditDraft: async (_: any, args: StoryArgsInt) => {
+      const story = await StoryDraft.findOne({ where: { id: args.storyid } });
+      story.title = args.title;
+      story.image_url = args.image_url;
+      story.content = args.content;
+      args.date_created = args.date_created;
+      story.authorid = args.authorid;
+      await story.save();
+      return true;
+    },
+    DeleteDraftOncePublished: async (_: any, args: ReadStoryInt) => {
+      const story = await StoryDraft.findOne({ where: { id: args.storyid } });
+      await story.destroy();
+      return true;
     },
   },
 };

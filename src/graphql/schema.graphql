@@ -1,13 +1,16 @@
 # Type Query
 type Query {
   # Get All Stories For Specific User
-  GetAllStories(authorid: Int): [StoryDraft]
+  GetAllStories(authorid: Int): [PublishedStory]
 
   # Get Specific Info From Story To Read
   ReadStory(storyid: String): PublishedStory
 
   # Get All Published Stories
   GetTodaysStories: [PublishedStory]
+
+  # Get Draft To Edit
+  GetEditDraft(storyid: String): StoryDraft
 }
 
 # StoryDraft Type
@@ -79,4 +82,18 @@ type Mutation {
 
   # Like Story
   LikeStory(storyid: String, authorid: Int): Boolean
+
+  # Edit Draft
+  EditDraft(
+    title: String!
+    content: String!
+    authorid: Int!
+    image_url: String
+    category: String
+    date_created: [String]
+    storyid: String
+  ): Boolean
+
+  # Delete Draft Once Published
+  DeleteDraftOncePublished(storyid: String): Boolean
 }

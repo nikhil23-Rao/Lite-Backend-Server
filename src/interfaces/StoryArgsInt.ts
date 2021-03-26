@@ -1,4 +1,5 @@
 export interface StoryArgsInt {
+  storyid: string;
   content: string;
   image_url: string;
   title: string;
