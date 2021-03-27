@@ -87,7 +87,6 @@ type Mutation {
   EditDraft(
     title: String!
     content: String!
-    authorid: Int!
     image_url: String
     category: String
     date_created: [String]

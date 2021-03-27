@@ -240,10 +240,10 @@ export const resolvers = {
     EditDraft: async (_: any, args: StoryArgsInt) => {
       const story = await StoryDraft.findOne({ where: { id: args.storyid } });
       story.title = args.title;
+      story.category = args.category;
       story.image_url = args.image_url;
       story.content = args.content;
       args.date_created = args.date_created;
-      story.authorid = args.authorid;
       await story.save();
       return true;
     },
