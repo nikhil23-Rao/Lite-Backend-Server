@@ -69,7 +69,9 @@ export const resolvers = {
     },
 
     GetEditDraft: async (_: any, args: ReadStoryInt) => {
+      // Find A Story With Given ID
       const draft = await StoryDraft.findOne({ where: { id: args.storyid } });
+      // Return The Story
       return draft;
     },
   },
@@ -218,9 +220,13 @@ export const resolvers = {
       // If All Above Worked Return True
       return true;
     },
+
     LikeStory: async (_: any, args: LikeStoryArgsInt) => {
+      // Store Users Who Liked Story In Array
       const likedBy: Array<number> = [];
+      // Find Story With Given ID
       const story = await PublishStory.findOne({ where: { id: args.storyid } });
+      // If User Has Alread Liked Post When They Click On Button Again Decrease Likes And Remove From LikedBy Array
       if (story.likedBy.includes(args.authorid)) {
         (story.likes = story.likes - 1),
           (story.likedBy = story.likedBy.filter(
@@ -228,7 +234,9 @@ export const resolvers = {
           )),
           await story.save();
         return true;
-      } else {
+      }
+      // Else Increase Like And Add To LikedBy Array
+      else {
         story.likes = story.likes + 1;
         likedBy.push(...story.likedBy, args.authorid);
         console.log(likedBy);
@@ -237,18 +245,25 @@ export const resolvers = {
         return true;
       }
     },
+
     EditDraft: async (_: any, args: StoryArgsInt) => {
+      // Find Story Draft
       const story = await StoryDraft.findOne({ where: { id: args.storyid } });
+      // Edit Following Properties
       story.title = args.title;
       story.category = args.category;
       story.image_url = args.image_url;
       story.content = args.content;
       args.date_created = args.date_created;
+      // Save Draft
       await story.save();
       return true;
     },
+
     DeleteDraftOncePublished: async (_: any, args: ReadStoryInt) => {
+      // Find Story To Delete
       const story = await StoryDraft.findOne({ where: { id: args.storyid } });
+      // DELETE
       await story.destroy();
       return true;
     },
