@@ -6,6 +6,7 @@ import { UserArgsInt } from "./interfaces/UserArgsInt";
 import { StoryArgsInt } from "./interfaces/StoryArgsInt";
 import { ReadStoryInt } from "./interfaces/ReadStoryInt";
 import { LikeStoryArgsInt } from "./interfaces/LikeStoryArgsInt";
+import { StoryIDArgsInt } from "./interfaces/StoryIdArgsInt";
 const { PublishStory } = require("../../database/models/PublishedStory");
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
@@ -68,7 +69,7 @@ export const resolvers = {
       return stories;
     },
 
-    GetEditDraft: async (_: any, args: ReadStoryInt) => {
+    GetEditDraft: async (_: any, args: StoryIDArgsInt) => {
       // Find A Story With Given ID
       const draft = await StoryDraft.findOne({ where: { id: args.storyid } });
       // Return The Story
@@ -260,7 +261,7 @@ export const resolvers = {
       return true;
     },
 
-    DeleteDraftOncePublished: async (_: any, args: ReadStoryInt) => {
+    DeleteDraftOncePublished: async (_: any, args: StoryIDArgsInt) => {
       // Find Story To Delete
       const story = await StoryDraft.findOne({ where: { id: args.storyid } });
       // DELETE
