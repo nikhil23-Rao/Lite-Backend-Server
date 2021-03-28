@@ -79,7 +79,7 @@ export const resolvers = {
   Mutation: {
     // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
-      // await User.sync({ force: true });
+      await User.sync({ force: true });
 
       // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
@@ -96,7 +96,7 @@ export const resolvers = {
         username: args.username,
         email: args.email,
         password,
-        id: "",
+        id: args.id,
       });
 
       // Save User To PSQL Database
@@ -115,7 +115,7 @@ export const resolvers = {
     },
     // OAuth Register Mutation
     OAuthRegister: async (_: any, args: UserArgsInt) => {
-      // await OAuthUser.sync({ force: true });
+      await OAuthUser.sync({ force: true });
 
       // Check If User Is Already Registered
       if (
@@ -129,7 +129,7 @@ export const resolvers = {
       const user = OAuthUser.build({
         username: args.username,
         email: args.email,
-        id: "",
+        id: args.id,
       });
 
       // Save User To PSQL Database
@@ -181,7 +181,7 @@ export const resolvers = {
       return token;
     },
     SaveDraft: async (_: any, args: StoryArgsInt) => {
-      // await StoryDraft.sync({ force: true });
+      await StoryDraft.sync({ force: true });
 
       // Build A New Draft With Given Properties By Client
       const draft = StoryDraft.build({
@@ -202,7 +202,7 @@ export const resolvers = {
     },
 
     PublishStory: async (_: any, args: StoryArgsInt) => {
-      // await PublishStory.sync({ force: true });
+      await PublishStory.sync({ force: true });
 
       // Build Published Story With Given Properties From Client
       const story = PublishStory.build({
@@ -224,7 +224,7 @@ export const resolvers = {
 
     LikeStory: async (_: any, args: LikeStoryArgsInt) => {
       // Store Users Who Liked Story In Array
-      const likedBy: Array<number> = [];
+      const likedBy: Array<string> = [];
       // Find Story With Given ID
       const story = await PublishStory.findOne({ where: { id: args.storyid } });
       // If User Has Alread Liked Post When They Click On Button Again Decrease Likes And Remove From LikedBy Array

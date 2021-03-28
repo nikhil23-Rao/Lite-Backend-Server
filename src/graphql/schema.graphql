@@ -1,7 +1,7 @@
 # Type Query
 type Query {
   # Get All Stories For Specific User
-  GetAllStories(authorid: Int): [PublishedStory]
+  GetAllStories(authorid: String): [PublishedStory]
 
   # Get Specific Info From Story To Read
   ReadStory(storyid: String): PublishedStory
@@ -19,7 +19,7 @@ type StoryDraft {
   image_url: String
   title: String
   id: String
-  authorid: Int
+  authorid: String
   date_created: [String]
   category: String
 }
@@ -30,11 +30,11 @@ type PublishedStory {
   image_url: String
   title: String
   id: String
-  authorid: Int
+  authorid: String
   date_created: [String]
   category: String
   likes: Int
-  likedBy: [Int]
+  likedBy: [String]
 }
 
 # Mutation
@@ -45,6 +45,7 @@ type Mutation {
     username: String!
     password: String!
     image_url: String
+    id: String
   ): String!
 
   # Login: Responsible For Logging In User And Providing JWT
@@ -53,7 +54,12 @@ type Mutation {
   # OAuth: Does Two Steps Above, Without Password
 
   # OAuth Register
-  OAuthRegister(email: String!, username: String!, image_url: String): String!
+  OAuthRegister(
+    email: String!
+    username: String!
+    image_url: String
+    id: String
+  ): String!
 
   #OAuth Login
   OAuthLogin(email: String!): String!
@@ -62,7 +68,7 @@ type Mutation {
   SaveDraft(
     title: String!
     content: String!
-    authorid: Int!
+    authorid: String
     image_url: String
     category: String
     date_created: [String]
@@ -73,7 +79,7 @@ type Mutation {
   PublishStory(
     title: String!
     content: String!
-    authorid: Int!
+    authorid: String
     image_url: String
     category: String
     date_created: [String]
@@ -81,7 +87,7 @@ type Mutation {
   ): Boolean!
 
   # Like Story
-  LikeStory(storyid: String, authorid: Int): Boolean
+  LikeStory(storyid: String, authorid: String): Boolean
 
   # Edit Draft
   EditDraft(
