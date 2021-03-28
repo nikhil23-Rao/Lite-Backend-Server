@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { generateJWT } from "./auth/generateJWT";
 import { UserArgsInt } from "./interfaces/UserArgsInt";
 import { StoryArgsInt } from "./interfaces/StoryArgsInt";
-import { ReadStoryInt } from "./interfaces/ReadStoryInt";
+import { ReadStoryArgsInt } from "./interfaces/ReadStoryArgsInt";
 import { LikeStoryArgsInt } from "./interfaces/LikeStoryArgsInt";
 import { StoryIDArgsInt } from "./interfaces/StoryIdArgsInt";
 const { PublishStory } = require("../../database/models/PublishedStory");
@@ -48,7 +48,7 @@ export const resolvers = {
       return stories;
     },
 
-    ReadStory: async (_: any, args: ReadStoryInt) => {
+    ReadStory: async (_: any, args: ReadStoryArgsInt) => {
       // Find ONLY From Published Stories And Return The Story CLient Can Read Based On The Story ID Provided
       const story = await PublishStory.findOne({ where: { id: args.storyid } });
 
