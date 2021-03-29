@@ -79,7 +79,7 @@ export const resolvers = {
   Mutation: {
     // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
-      await User.sync({ force: true });
+      // await User.sync({ force: true });
 
       // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
@@ -115,7 +115,7 @@ export const resolvers = {
     },
     // OAuth Register Mutation
     OAuthRegister: async (_: any, args: UserArgsInt) => {
-      await OAuthUser.sync({ force: true });
+      // await OAuthUser.sync({ force: true });
 
       // Check If User Is Already Registered
       if (
@@ -204,6 +204,14 @@ export const resolvers = {
     PublishStory: async (_: any, args: StoryArgsInt) => {
       await PublishStory.sync({ force: true });
 
+      const author = await User.findOne({ where: { id: args.authorid } });
+      const OAuthAuthor = await OAuthUser.findOne({
+        where: { id: args.authorid },
+      });
+
+      console.log(author);
+      console.log(OAuthAuthor);
+
       // Build Published Story With Given Properties From Client
       const story = PublishStory.build({
         content: args.content,
@@ -213,6 +221,8 @@ export const resolvers = {
         date_created: args.date_created,
         category: args.category,
         id: args.id,
+        authorName: author ? author.username : OAuthAuthor.username,
+        authorImage: author ? author.image_url : OAuthAuthor.image_url,
       });
 
       // Save To Story PSQL DB

@@ -35,6 +35,8 @@ type PublishedStory {
   category: String
   likes: Int
   likedBy: [String]
+  authorName: String
+  authorImage: String
 }
 
 # Mutation
