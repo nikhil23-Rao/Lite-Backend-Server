@@ -14,6 +14,12 @@ type Query {
 
   # Search
   Search(query: String): [PublishedStory]
+
+  # Sort By Drafts
+  SortByDraft(authorid: String): [StoryDraft]
+
+  # Sort By Published
+  SortByPublished(authorid: String): [PublishedStory]
 }
 
 # StoryDraft Type

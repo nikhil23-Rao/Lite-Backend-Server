@@ -84,6 +84,18 @@ export const resolvers = {
       ILIKE '%${args.query}%';`);
       return res;
     },
+    SortByDraft: async (_: any, args: StoryArgsInt) => {
+      const drafts = await StoryDraft.findAll({
+        where: { authorid: args.authorid },
+      });
+      return drafts;
+    },
+    SortByPublished: async (_: any, args: StoryArgsInt) => {
+      const published = await PublishStory.findAll({
+        where: { authorid: args.authorid },
+      });
+      return published;
+    },
   },
   Mutation: {
     // Register Mutation
