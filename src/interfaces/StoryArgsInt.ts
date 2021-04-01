@@ -9,5 +9,7 @@ export interface StoryArgsInt {
   category: string;
   published: boolean;
   likedBy: Array<number>;
+  authorName: string;
+  authorImage: string;
   likes: number;
 }

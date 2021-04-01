@@ -11,6 +11,9 @@ type Query {
 
   # Get Draft To Edit
   GetEditDraft(storyid: String): StoryDraft
+
+  # Search
+  Search(query: String): [PublishedStory]
 }
 
 # StoryDraft Type

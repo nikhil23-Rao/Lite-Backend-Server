@@ -7,6 +7,8 @@ import { StoryArgsInt } from "./interfaces/StoryArgsInt";
 import { ReadStoryArgsInt } from "./interfaces/ReadStoryArgsInt";
 import { LikeStoryArgsInt } from "./interfaces/LikeStoryArgsInt";
 import { StoryIDArgsInt } from "./interfaces/StoryIdArgsInt";
+import { SearchArgsInt } from "./interfaces/SearchArgsInt";
+const { sequelize } = require("../../database/src/connection");
 const { PublishStory } = require("../../database/models/PublishedStory");
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
@@ -74,6 +76,13 @@ export const resolvers = {
       const draft = await StoryDraft.findOne({ where: { id: args.storyid } });
       // Return The Story
       return draft;
+    },
+
+    Search: async (_: any, args: SearchArgsInt) => {
+      const [res] = await sequelize.query(`select * from "PublishStories"  where
+      title || ' ' || category || ' ' || content
+      ILIKE '%${args.query}%';`);
+      return res;
     },
   },
   Mutation: {
@@ -181,7 +190,7 @@ export const resolvers = {
       return token;
     },
     SaveDraft: async (_: any, args: StoryArgsInt) => {
-      await StoryDraft.sync({ force: true });
+      // await StoryDraft.sync({ force: true });
 
       // Build A New Draft With Given Properties By Client
       const draft = StoryDraft.build({
@@ -202,7 +211,7 @@ export const resolvers = {
     },
 
     PublishStory: async (_: any, args: StoryArgsInt) => {
-      await PublishStory.sync({ force: true });
+      // await PublishStory.sync({ force: true });
 
       const author = await User.findOne({ where: { id: args.authorid } });
       const OAuthAuthor = await OAuthUser.findOne({
