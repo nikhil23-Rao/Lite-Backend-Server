@@ -8,7 +8,7 @@ import { ReadStoryArgsInt } from "./interfaces/ReadStoryArgsInt";
 import { LikeStoryArgsInt } from "./interfaces/LikeStoryArgsInt";
 import { StoryIDArgsInt } from "./interfaces/StoryIdArgsInt";
 import { SearchArgsInt } from "./interfaces/SearchArgsInt";
-const { sequelize } = require("../../database/src/connection");
+const { SearchQuery } = require("../../database/sql/SearchQuery");
 const { PublishStory } = require("../../database/models/PublishedStory");
 const { User } = require("../../database/models/User");
 const { OAuthUser } = require("../../database/models/OAuthUser");
@@ -79,21 +79,24 @@ export const resolvers = {
     },
 
     Search: async (_: any, args: SearchArgsInt) => {
-      const [res] = await sequelize.query(`select * from "PublishStories"  where
-      title || ' ' || category || ' ' || content
-      ILIKE '%${args.query}%';`);
-      return res;
+      // Find Stories That Match The Search Query
+      const results = await SearchQuery(args.query);
+      return results;
     },
     SortByDraft: async (_: any, args: StoryArgsInt) => {
+      // Find All Drafts For Current User
       const drafts = await StoryDraft.findAll({
         where: { authorid: args.authorid },
       });
+      // Return Them
       return drafts;
     },
     SortByPublished: async (_: any, args: StoryArgsInt) => {
+      // Find All Published Stories For Current User
       const published = await PublishStory.findAll({
         where: { authorid: args.authorid },
       });
+      // Return Them
       return published;
     },
   },
