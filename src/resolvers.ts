@@ -8,6 +8,7 @@ import { ReadStoryArgsInt } from "./interfaces/ReadStoryArgsInt";
 import { LikeStoryArgsInt } from "./interfaces/LikeStoryArgsInt";
 import { StoryIDArgsInt } from "./interfaces/StoryIdArgsInt";
 import { SearchArgsInt } from "./interfaces/SearchArgsInt";
+const { GetDate } = require("../../../frontend/src/utils/GetDate");
 const { SearchQuery } = require("../../database/sql/SearchQuery");
 const { PublishStory } = require("../../database/models/PublishedStory");
 const { User } = require("../../database/models/User");
@@ -64,9 +65,12 @@ export const resolvers = {
 
     GetTodaysStories: async () => {
       //@TODO - Add Date Property To Compare If Story Came Out Today
+      const todaysDate = GetDate();
 
       // Find All Published Stories
-      const stories = await PublishStory.findAll();
+      const stories = await PublishStory.findAll({
+        where: { date_created: todaysDate },
+      });
       //Return Them
       return stories;
     },
