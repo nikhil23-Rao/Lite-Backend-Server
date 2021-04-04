@@ -64,10 +64,10 @@ export const resolvers = {
     },
 
     GetTodaysStories: async () => {
-      //@TODO - Add Date Property To Compare If Story Came Out Today
+      // Get Todays Date
       const todaysDate = GetDate();
 
-      // Find All Published Stories
+      // Find All Published Stories For Todays Date
       const stories = await PublishStory.findAll({
         where: { date_created: todaysDate },
       });
