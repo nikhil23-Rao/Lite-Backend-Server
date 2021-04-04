@@ -87,6 +87,12 @@ export const resolvers = {
       const results = await SearchQuery(args.query);
       return results;
     },
+
+    GetSearchableStories: async () => {
+      const stories = await PublishStory.findAll();
+      return stories;
+    },
+
     SortByDraft: async (_: any, args: StoryArgsInt) => {
       // Find All Drafts For Current User
       const drafts = await StoryDraft.findAll({

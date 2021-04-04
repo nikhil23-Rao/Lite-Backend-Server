@@ -20,6 +20,9 @@ type Query {
 
   # Sort By Published
   SortByPublished(authorid: String): [PublishedStory]
+
+  # Get All Stories For Searching
+  GetSearchableStories: [PublishedStory]
 }
 
 # StoryDraft Type
