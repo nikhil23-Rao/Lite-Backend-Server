@@ -8,6 +8,7 @@ import { ReadStoryArgsInt } from "./interfaces/ReadStoryArgsInt";
 import { LikeStoryArgsInt } from "./interfaces/LikeStoryArgsInt";
 import { StoryIDArgsInt } from "./interfaces/StoryIdArgsInt";
 import { SearchArgsInt } from "./interfaces/SearchArgsInt";
+import { ProfileArgsInt } from "./interfaces/ProfileArgsInt";
 const { GetDate } = require("../../../frontend/src/utils/GetDate");
 const { SearchQuery } = require("../../database/sql/SearchQuery");
 const { PublishStory } = require("../../database/models/PublishedStory");
@@ -113,7 +114,7 @@ export const resolvers = {
   Mutation: {
     // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
-      // await User.sync({ force: true });
+      await User.sync({ force: true });
 
       // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
@@ -149,7 +150,7 @@ export const resolvers = {
     },
     // OAuth Register Mutation
     OAuthRegister: async (_: any, args: UserArgsInt) => {
-      // await OAuthUser.sync({ force: true });
+      await OAuthUser.sync({ force: true });
 
       // Check If User Is Already Registered
       if (
@@ -311,6 +312,23 @@ export const resolvers = {
       // DELETE
       await story.destroy();
       return true;
+    },
+    UpdateProfile: async (_: any, args: ProfileArgsInt) => {
+      const user = await User.findOne({ where: { id: args.authorid } });
+      const oAuthUser = await OAuthUser.findOne({
+        where: { id: args.authorid },
+      });
+      if (user) {
+        user.bio = args.bio;
+        user.image_url = args.image_url;
+        await user.save();
+        return true;
+      } else {
+        oAuthUser.bio = args.bio;
+        oAuthUser.image_url = args.image_url;
+        await oAuthUser.save();
+        return true;
+      }
     },
   },
 };
