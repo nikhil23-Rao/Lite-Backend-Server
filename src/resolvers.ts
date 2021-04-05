@@ -110,6 +110,12 @@ export const resolvers = {
       // Return Them
       return published;
     },
+    GetStoriesHome: async (_: any, __: any) => {
+      const stories = await PublishStory.findAll({
+        order: [["likes", "DESC"]],
+      });
+      return stories;
+    },
   },
   Mutation: {
     // Register Mutation
@@ -241,7 +247,7 @@ export const resolvers = {
     },
 
     PublishStory: async (_: any, args: StoryArgsInt) => {
-      await PublishStory.sync({ force: true });
+      // await PublishStory.sync({ force: true });
 
       const author = await User.findOne({ where: { id: args.authorid } });
       const OAuthAuthor = await OAuthUser.findOne({

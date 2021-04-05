@@ -23,6 +23,9 @@ type Query {
 
   # Get All Stories For Searching
   GetSearchableStories: [PublishedStory]
+
+  # Get Stories For Home Page
+  GetStoriesHome: [PublishedStory]
 }
 
 # StoryDraft Type
