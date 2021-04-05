@@ -327,11 +327,21 @@ export const resolvers = {
       });
 
       if (user) {
+        for (let story in stories) {
+          stories[story].authorImage = args.image_url;
+          await stories[story].save();
+        }
+
         user.bio = args.bio;
         user.image_url = args.image_url;
         await user.save();
         return true;
       } else {
+        for (let story in stories) {
+          stories[story].authorImage = args.image_url;
+          await stories[story].save();
+        }
+
         oAuthUser.bio = args.bio;
         oAuthUser.image_url = args.image_url;
         await oAuthUser.save();
