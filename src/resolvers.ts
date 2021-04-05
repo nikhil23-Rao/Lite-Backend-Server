@@ -142,6 +142,7 @@ export const resolvers = {
         username: user.username,
         email: user.email,
         id: user.id,
+        bio: user.bio,
         image_url: user.image_url,
       });
 
@@ -175,6 +176,7 @@ export const resolvers = {
         username: user.username,
         email: user.email,
         id: user.id,
+        bio: user.bio,
         image_url: user.image_url,
       });
 
@@ -195,6 +197,7 @@ export const resolvers = {
         email: user.email,
         id: user.id,
         username: user.username,
+        bio: user.bio,
         image_url: user.image_url,
       });
       // Return JWT Token To Client
@@ -210,6 +213,7 @@ export const resolvers = {
         email: user.email,
         id: user.id,
         username: user.username,
+        bio: user.bio,
         image_url: user.image_url,
       });
       // Return JWT Token To Client
