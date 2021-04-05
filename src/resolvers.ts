@@ -220,7 +220,7 @@ export const resolvers = {
       return token;
     },
     SaveDraft: async (_: any, args: StoryArgsInt) => {
-      // await StoryDraft.sync({ force: true });
+      await StoryDraft.sync({ force: true });
 
       // Build A New Draft With Given Properties By Client
       const draft = StoryDraft.build({
@@ -241,7 +241,7 @@ export const resolvers = {
     },
 
     PublishStory: async (_: any, args: StoryArgsInt) => {
-      // await PublishStory.sync({ force: true });
+      await PublishStory.sync({ force: true });
 
       const author = await User.findOne({ where: { id: args.authorid } });
       const OAuthAuthor = await OAuthUser.findOne({
@@ -322,6 +322,10 @@ export const resolvers = {
       const oAuthUser = await OAuthUser.findOne({
         where: { id: args.authorid },
       });
+      const stories = await PublishStory.findAll({
+        where: { authorid: args.authorid },
+      });
+
       if (user) {
         user.bio = args.bio;
         user.image_url = args.image_url;
