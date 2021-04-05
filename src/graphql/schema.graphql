@@ -59,6 +59,7 @@ type Mutation {
     username: String!
     password: String!
     image_url: String
+    bio: String
     id: String
   ): String!
 
@@ -72,6 +73,7 @@ type Mutation {
     email: String!
     username: String!
     image_url: String
+    bio: String
     id: String
   ): String!
 
@@ -115,4 +117,7 @@ type Mutation {
 
   # Delete Draft Once Published
   DeleteDraftOncePublished(storyid: String): Boolean
+
+  # Update Profile
+  UpdateProfile(authorid: String, bio: String, image_url: String): Boolean
 }
