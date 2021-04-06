@@ -29,6 +29,9 @@ type Query {
 
   # Get User Profile
   GetProfile(authorid: String): Profile
+
+  # Get Profile Info
+  GetProfileInfo(authorid: String): [String]
 }
 
 # Profile Type

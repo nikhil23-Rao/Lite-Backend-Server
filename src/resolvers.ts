@@ -124,6 +124,23 @@ export const resolvers = {
       if (user) return user;
       else return oAuthUser;
     },
+    GetProfileInfo: async (_: any, args: ProfileArgsInt) => {
+      let userStories = await PublishStory.findAll({
+        where: { authorid: args.authorid },
+      });
+      let stories = await PublishStory.findAll();
+      const likes = userStories.reduce((prev: any, cur: any) => {
+        return prev + cur.likes;
+      }, 0);
+      let storiesLiked = 0;
+      for (let story in stories) {
+        if (stories[story].likedBy.includes(args.authorid)) {
+          storiesLiked = storiesLiked + 1;
+        }
+      }
+      console.log(likes, userStories, storiesLiked);
+      return [`${userStories.length}`, `${likes}`, `${storiesLiked}`];
+    },
   },
   Mutation: {
     // Register Mutation
@@ -165,7 +182,7 @@ export const resolvers = {
     },
     // OAuth Register Mutation
     OAuthRegister: async (_: any, args: UserArgsInt) => {
-      await OAuthUser.sync({ force: true });
+      // await OAuthUser.sync({ force: true });
 
       // Check If User Is Already Registered
       if (
