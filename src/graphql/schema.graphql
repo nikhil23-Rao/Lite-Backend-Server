@@ -26,6 +26,18 @@ type Query {
 
   # Get Stories For Home Page
   GetStoriesHome: [PublishedStory]
+
+  # Get User Profile
+  GetProfile(authorid: String): Profile
+}
+
+# Profile Type
+type Profile {
+  id: String
+  username: String
+  email: String
+  bio: String
+  image_url: String
 }
 
 # StoryDraft Type
