@@ -128,7 +128,7 @@ export const resolvers = {
   Mutation: {
     // Register Mutation
     Register: async (_: any, args: UserArgsInt) => {
-      await User.sync({ force: true });
+      // await User.sync({ force: true });
 
       // Generate Bcrypt Salt
       const salt = await bcrypt.genSalt(10);
@@ -179,6 +179,7 @@ export const resolvers = {
       const user = OAuthUser.build({
         username: args.username,
         email: args.email,
+        image_url: args.image_url,
         id: args.id,
       });
 
