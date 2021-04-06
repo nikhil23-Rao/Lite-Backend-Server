@@ -116,6 +116,14 @@ export const resolvers = {
       });
       return stories;
     },
+    GetProfile: async (_: any, args: ProfileArgsInt) => {
+      const user = await User.findOne({ where: { id: args.authorid } });
+      const oAuthUser = await OAuthUser.findOne({
+        where: { id: args.authorid },
+      });
+      if (user) return user;
+      else return oAuthUser;
+    },
   },
   Mutation: {
     // Register Mutation
