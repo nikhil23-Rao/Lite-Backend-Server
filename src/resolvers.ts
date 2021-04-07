@@ -252,7 +252,7 @@ export const resolvers = {
       return token;
     },
     SaveDraft: async (_: any, args: StoryArgsInt) => {
-      await StoryDraft.sync({ force: true });
+      // await StoryDraft.sync({ force: true });
 
       // Build A New Draft With Given Properties By Client
       const draft = StoryDraft.build({
