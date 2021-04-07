@@ -10,11 +10,11 @@ import { StoryIDArgsInt } from "./interfaces/StoryIdArgsInt";
 import { SearchArgsInt } from "./interfaces/SearchArgsInt";
 import { ProfileArgsInt } from "./interfaces/ProfileArgsInt";
 const { GetDate } = require("../../../frontend/src/utils/GetDate");
-const { SearchQuery } = require("../../database/sql/SearchQuery");
-const { PublishStory } = require("../../database/models/PublishedStory");
-const { User } = require("../../database/models/User");
-const { OAuthUser } = require("../../database/models/OAuthUser");
-const { StoryDraft } = require("../../database/models/StoryDraft");
+const { SearchQuery } = require("./database/sql/SearchQuery");
+const { PublishStory } = require("./database/models/PublishedStory");
+const { User } = require("./database/models/User");
+const { OAuthUser } = require("./database/models/OAuthUser");
+const { StoryDraft } = require("./database/models/StoryDraft");
 
 // GraphQL + Apollo Resolvers
 export const resolvers = {

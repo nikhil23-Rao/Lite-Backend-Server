@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 
 // User Created Modules
-const { connectToDB } = require("../../database/src/connection");
+const { connectToDB } = require("./database/src/connection");
 import { resolvers } from "./resolvers";
 
 // Middleware
